@@ -1,6 +1,8 @@
-# TODO:  Напишите свой вариант
+from urllib import request
+from rest_framework import filters
+from rest_framework import status
 from django.shortcuts import get_object_or_404
-from posts.models import Group, Post
+from posts.models import Group, Post, Follow 
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
 
@@ -39,12 +41,18 @@ class CommentViewSet(viewsets.ModelViewSet):
         new_queryset = post.comments.all()
         return new_queryset
 
+
 class FollowViewSet(viewsets.ModelViewSet):
     """Вьюсет для модели Follow."""
-    serializer_class = FollowSerializer
+    serializer_class = FollowSerializer    
     permission_classes = [IsAuthenticated, IsAuthorOrReadOnly]
+    filter_backends = (filters.SearchFilter)
+    search_fields = ('following__username',) 
 
     def get_queryset(self):
-        posts = Post.objects.filter(author__following__user=self.request.user)
-        new_queryset = posts
+        following = Follow.objects.filter(user=self.request.user)
+        new_queryset = following
         return new_queryset
+
+    def perform_create(self, serializer):        
+        serializer.save(user=self.request.user)    
