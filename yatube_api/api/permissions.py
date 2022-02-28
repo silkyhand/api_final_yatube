@@ -5,6 +5,7 @@ class IsAuthorOrReadOnly(permissions.BasePermission):
     """
     Пользовательский пермишен - только автору разрешается редактировать записи.
     """
+
     def has_object_permission(self, request, view, obj):
 
         if request.method in permissions.SAFE_METHODS:

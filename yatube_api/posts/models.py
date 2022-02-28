@@ -17,7 +17,7 @@ class Post(models.Model):
         help_text='Выберите группу',
         related_name='posts',
         on_delete=models.SET_NULL,
-    )    
+    )
     image = models.ImageField(
         upload_to='posts/', null=True, blank=True)
 
@@ -31,7 +31,7 @@ class Group(models.Model):
     description = models.TextField()
 
     def __str__(self):
-        return self.title        
+        return self.title
 
 
 class Comment(models.Model):
@@ -59,7 +59,5 @@ class Follow(models.Model):
         verbose_name='Автор',
     )
 
-        
     def __str__(self):
         return f'{self.user} follows {self.following}'
-
